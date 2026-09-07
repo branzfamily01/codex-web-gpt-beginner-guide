@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="初心者向け Codex Web GPT 導入マニュアル。ChatGPT Web を Codex のモデルとして使うまでを、画面付きで順番に案内します。" />
+  <title>Codex Web GPT 導入ガイド｜初心者向け</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">初心者向け・Windows版</p>
+      <h1>Codex Web GPT 導入ガイド</h1>
+      <p class="lead">ChatGPT Web を Codex のモデル一覧に追加し、必要に応じてローカルのファイルやコマンドへつなぐまでを、迷わない順番で説明します。</p>
+      <div class="hero-actions">
+        <button class="primary" data-jump="step-1">手順1から始める</button>
+        <button class="ghost" id="toggle-all">全部ひらく</button>
+      </div>
+      <div class="status-grid" aria-label="到達目標">
+        <div><strong>①</strong><span>ランチャー導入</span></div>
+        <div><strong>②</strong><span>ChatGPT Webモデル追加</span></div>
+        <div><strong>③</strong><span>MCP接続（任意）</span></div>
+        <div><strong>④</strong><span>実動作テスト</span></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="notice warning">
+      <h2>最初に必ず読む</h2>
+      <p><strong>Codex Web GPT は非公式ツールです。</strong> OpenAI公式製品ではありません。ChatGPTの画面変更などで動かなくなる可能性があります。</p>
+      <p><strong>APIキーは絶対にスクリーンショット・チャット・SNSへ載せないでください。</strong> もし表示したまま共有した場合は、そのキーを削除して作り直します。</p>
+    </section>
+
+    <section class="toolbar" aria-label="読み上げ設定">
+      <div>
+        <strong>読み上げ</strong>
+        <span>このマニュアルを音声で確認できます。</span>
+      </div>
+      <div class="tts-controls">
+        <label>速度
+          <select id="tts-rate">
+            <option>0.7</option><option>0.8</option><option>0.9</option><option selected>1.0</option><option>1.1</option><option>1.2</option><option>1.3</option><option>1.4</option><option>1.5</option><option>1.6</option><option>1.7</option><option>1.8</option><option>1.9</option><option>2.0</option><option>2.1</option><option>2.2</option><option>2.3</option><option>2.4</option><option>2.5</option><option>2.6</option><option>2.7</option><option>2.8</option><option>2.9</option><option>3.0</option>
+          </select>
+        </label>
+        <button id="tts-start">▶ 読み上げ</button>
+        <button id="tts-stop">■ 停止</button>
+      </div>
+    </section>
+
+    <section class="overview">
+      <h2>完成すると何ができる？</h2>
+      <div class="flow">
+        <div class="flow-box">Codex</div><div class="arrow">→</div>
+        <div class="flow-box">Codex Web GPT</div><div class="arrow">→</div>
+        <div class="flow-box">ChatGPT Web</div>
+      </div>
+      <p>Codexのモデル選択に <code>ChatGPT Web — Instant / Medium / High</code> などが追加されます。MCPまで設定すると、ChatGPT WebモデルからCodexの作業環境へつなぐ構成を検証できます。</p>
+    </section>
+
+    <section class="checklist-card">
+      <h2>導入チェックリスト</h2>
+      <p>終わった項目にチェックを入れると、この端末に保存されます。</p>
+      <div id="master-checklist" class="master-checklist"></div>
+    </section>
+
+    <section class="steps" id="steps">
+      <article class="step" id="step-1" data-step="1">
+        <button class="step-head" aria-expanded="true">
+          <span class="num">1</span><span><b>GitHubの最新版を確認</b><small>まず配布元を確認する</small></span><span class="chev">⌄</span>
+        </button>
+        <div class="step-body open">
+          <p>配布元は <strong>miuuyy/codex-chatgpt-web</strong> です。GitHubの <strong>Releases</strong> を開き、最新版を確認します。</p>
+          <img src="assets/release.jpg" alt="GitHub Releases 画面" loading="lazy" />
+          <div class="tip"><strong>ポイント</strong>：「Tags」ではなく <strong>Releases</strong> を使います。最新版には <strong>Latest</strong> が付きます。</div>
+          <label class="done"><input type="checkbox" data-check="release"> Releasesを確認した</label>
+        </div>
+      </article>
+
+      <article class="step" id="step-2" data-step="2">
+        <button class="step-head" aria-expanded="false">
+          <span class="num">2</span><span><b>Windowsランチャーをインストール</b><small>PowerShellは1行だけ</small></span><span class="chev">⌄</span>
+        </button>
+        <div class="step-body">
+          <p>Windows PowerShellを開き、次のコマンドを貼り付けてEnterします。</p>
+          <div class="codebox"><code id="install-command">irm https://github.com/miuuyy/codex-chatgpt-web/releases/latest/download/install-launcher.ps1 | iex</code><button data-copy="install-command">コピー</button></div>
+          <p>成功すると、次のような行が出ます。</p>
+          <pre>Installed C:\Users\user\AppData\Local\Programs\Codex Web GPT\Codex Web GPT.exe</pre>
+          <img src="assets/install.jpg" alt="PowerShellでCodex Web GPTをインストールした画面" loading="lazy" />
+          <div class="notice info"><strong>「DevTools listening...」は異常ではありません。</strong> ランチャー内ブラウザーの制御待ちです。</div>
+          <label class="done"><input type="checkbox" data-check="launcher"> ランチャーをインストールした</label>
+        </div>
+      </article>
+
+      <article class="step" id="step-3" data-step="3">
+        <button class="step-head" aria-expanded="false">
+          <span class="num">3</span><span><b>Codex Web GPT の基本セットアップ</b><small>サインイン → スモークテスト → Codexへ追加</small></span><span class="chev">⌄</span>
+        </button>
+        <div class="step-body">
+          <ol>
+            <li><strong>ChatGPTにサインイン</strong>：ランチャー内のChatGPTブラウザーで、自分のChatGPTアカウントにログイン。</li>
+            <li><strong>ブラウザーのスモークテスト</strong>：短い応答が正常に返るか確認。</li>
+            <li><strong>Codexにインストール</strong>：ChatGPT WebモデルをCodexのモデル一覧へ追加。</li>
+          </ol>
+          <img src="assets/setup.jpg" alt="Codex Web GPTのセットアップ完了画面" loading="lazy" />
+          <p>3つとも緑のチェックになったら、<strong>Codexを一度終了して起動し直します。</strong></p>
+          <label class="done"><input type="checkbox" data-check="setup"> 3項目が緑チェックになった</label>
+        </div>
+      </article>
+
+      <article class="step" id="step-4" data-step="4">
+        <button class="step-head" aria-expanded="false">
+          <span class="num">4</span><span><b>CodexにChatGPT Webモデルが出るか確認</b><small>まずは Medium がおすすめ</small></span><span class="chev">⌄</span>
+        </button>
+        <div class="step-body">
+          <p>Codexの入力欄右下にあるモデル名をクリックします。次のような項目が出れば成功です。</p>
+          <ul>
+            <li>ChatGPT Web — Instant</li>
+            <li>ChatGPT Web — Medium</li>
+            <li>ChatGPT Web — High</li>
+          </ul>
+          <img src="assets/models.jpg" alt="Codexモデル一覧にChatGPT Webが追加された画面" loading="lazy" />
+          <div class="tip"><strong>初回は Medium 推奨。</strong> 速さと考える量のバランスが取りやすいです。</div>
+          <label class="done"><input type="checkbox" data-check="models"> ChatGPT Webモデルが表示された</label>
+        </div>
+      </article>
+
+      <article class="step optional" id="step-5" data-step="5">
+        <button class="step-head" aria-expanded="false">
+          <span class="num">5</span><span><b>【任意】MCPでローカルCodexハーネスへ接続</b><small>ファイル・コマンドを使わせたい人向け</small></span><span class="chev">⌄</span>
+        </button>
+        <div class="step-body">
+          <div class="notice warning"><strong>この章は上級設定です。</strong> APIキー・Tunnel・開発者モードを扱います。単にChatGPT Webモデルを使うだけなら、ここは飛ばせます。</div>
+          <h3>5-1. TunnelとAPIキーを作る</h3>
+          <p>Codex Web GPTの <strong>MCP</strong> を開き、画面の案内からOpenAI Platformへ移動します。</p>
+          <img src="assets/mcp.jpg" alt="Codex Web GPTのMCP設定画面" loading="lazy" />
+          <ul>
+            <li>Tunnel名：<code>Codex Native2</code></li>
+            <li>Description：任意</li>
+            <li>Organization：自分のPersonal</li>
+            <li>ChatGPT workspace：候補に出る自分のワークスペースを選択</li>
+          </ul>
+          <p>APIキーも作成します。<strong>作成直後に1回だけ表示される秘密鍵をコピーし、Codex Web GPT内だけに貼ります。</strong></p>
+          <div class="notice danger"><strong>APIキーがスクショに映ったら即削除して再発行。</strong>「あとで隠せばいい」は不可です。</div>
+
+          <h3>5-2. ChatGPT側で開発者モードをON</h3>
+          <p>ChatGPTの <strong>設定 → セキュリティとログイン → 開発者モード</strong> をONにします。</p>
+
+          <h3>5-3. 新しいプラグインを作成</h3>
+          <ul>
+            <li>名前：<code>Codex Native2</code></li>
+            <li>接続：<strong>トンネル</strong></li>
+            <li>利用可能なトンネル：作成した <code>Codex Native2</code></li>
+            <li>認証：<strong>認証なし</strong></li>
+          </ul>
+          <img src="assets/connector.jpg" alt="Codex Native2プラグイン作成画面" loading="lazy" />
+          <p>警告内容を読んで「理解したうえで、続行します」にチェックし、作成します。</p>
+
+          <h3>5-4. Codex Web GPTでランタイム検証</h3>
+          <p>Codex Web GPTのMCP画面へ戻り、<strong>ランタイムを検証</strong>します。緑表示で次が確認できれば接続成功です。</p>
+          <ul>
+            <li>Responses proxy is healthy</li>
+            <li>Tunnel runtime reports healthy and ready</li>
+            <li>ChatGPT connector “Codex Native2” is available</li>
+          </ul>
+          <img src="assets/verified.jpg" alt="MCPランタイム検証に成功した画面" loading="lazy" />
+          <label class="done"><input type="checkbox" data-check="mcp"> MCPのランタイム検証が通った</label>
+        </div>
+      </article>
+
+      <article class="step" id="step-6" data-step="6">
+        <button class="step-head" aria-expanded="false">
+          <span class="num">6</span><span><b>実際に動くかテスト</b><small>必ず「新しいチャット」で試す</small></span><span class="chev">⌄</span>
+        </button>
+        <div class="step-body">
+          <p><strong>重要：</strong>MCP設定後は、古いチャットを使い回さず、Codexで<strong>新しいチャット</strong>を作ってください。</p>
+          <div class="codebox"><code id="test-prompt">このリポジトリのファイルを3つ確認して、構成を日本語で簡潔に説明して</code><button data-copy="test-prompt">コピー</button></div>
+          <p>ローカルファイルを実際に読めれば成功です。</p>
+          <p>次に、コマンド確認：</p>
+          <div class="codebox"><code id="pwd-prompt">pwd と dir を実行して、現在の作業フォルダとファイル一覧を日本語で教えて</code><button data-copy="pwd-prompt">コピー</button></div>
+          <p>書き込みを確認したい場合は、テスト用ファイルを作らせ、内容を読み返させます。テスト後は削除します。</p>
+          <label class="done"><input type="checkbox" data-check="test"> ローカルファイル・コマンドの確認ができた</label>
+        </div>
+      </article>
+
+      <article class="step" id="step-7" data-step="7">
+        <button class="step-head" aria-expanded="false">
+          <span class="num">7</span><span><b>よくあるエラーと直し方</b><small>今回実際に詰まりやすかった場所</small></span><span class="chev">⌄</span>
+        </button>
+        <div class="step-body troubleshooting">
+          <h3>「Quit Codex Web GPT before updating it」</h3>
+          <p>Codex Web GPTが裏で起動中です。ランチャーを完全終了してから、同じインストールコマンドを再実行します。</p>
+
+          <h3>「Installer exited with code 2」</h3>
+          <p>既存インストールが中途半端な場合があります。Windowsの「インストールされているアプリ」から <strong>Codex Web GPT</strong> をアンインストールし、再インストールします。</p>
+
+          <h3>モデル一覧に「ChatGPT Web」が出ない</h3>
+          <p>Codex Web GPTのセットアップで3項目が緑チェックか確認し、Codexを完全終了して起動し直します。</p>
+
+          <h3>「ローカルのリポジトリへアクセスできない」</h3>
+          <p>Browser-onlyの状態です。必要ならMCP設定へ進みます。</p>
+
+          <h3>「missing cwd in trusted Codex environment context」</h3>
+          <p>MCP設定前から使っていた古いCodexチャットを再利用している可能性があります。<strong>Codexを再起動 → 対象プロジェクト → 新しいチャット</strong> でやり直します。</p>
+
+          <h3>Temporary Chat の検証エラー</h3>
+          <p>ChatGPT側のUI変更で検出が一時的にズレることがあります。TunnelやAPIキーをすぐ作り直さず、ランタイム検証を再実行し、Codex Web GPTの最新版も確認します。</p>
+        </div>
+      </article>
+
+      <article class="step" id="step-8" data-step="8">
+        <button class="step-head" aria-expanded="false">
+          <span class="num">8</span><span><b>普段の使い分け</b><small>どのモデルを選ぶ？</small></span><span class="chev">⌄</span>
+        </button>
+        <div class="step-body">
+          <div class="compare">
+            <div><h3>ChatGPT Web — Instant</h3><p>軽い確認、短い修正、スピード重視。</p></div>
+            <div><h3>ChatGPT Web — Medium</h3><p>普段使いの第一候補。実装・調査・レビューのバランス型。</p></div>
+            <div><h3>ChatGPT Web — High</h3><p>複雑な設計、難しい不具合、慎重なレビュー。</p></div>
+            <div><h3>Codexネイティブモデル</h3><p>Codex標準の経路を使いたいとき。用途に応じて切替。</p></div>
+          </div>
+          <div class="tip"><strong>おすすめ運用：</strong>普段は Medium、重い問題だけ High。まず小さく試してから本番リポジトリに使います。</div>
+        </div>
+      </article>
+    </section>
+
+    <section class="final-card">
+      <h2>導入完了チェック</h2>
+      <p>次の3つができれば、初心者向けの導入は完了です。</p>
+      <ol>
+        <li>Codexのモデル一覧に <strong>ChatGPT Web</strong> が出る</li>
+        <li>新しいCodexチャットで回答が返る</li>
+        <li>必要ならMCPのランタイム検証が緑になる</li>
+      </ol>
+    </section>
+
+    <section class="sources">
+      <h2>公式・配布元リンク</h2>
+      <p><a href="https://github.com/miuuyy/codex-chatgpt-web" target="_blank" rel="noopener">miuuyy/codex-chatgpt-web</a></p>
+      <p><a href="https://github.com/miuuyy/codex-chatgpt-web/releases" target="_blank" rel="noopener">Releases</a></p>
+      <p class="muted">※画面や名称は更新で変わることがあります。最新版READMEを優先してください。</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Codex Web GPT 初心者向け導入ガイド</p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>

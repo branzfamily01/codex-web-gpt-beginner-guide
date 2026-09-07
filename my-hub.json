@@ -1,0 +1,18 @@
+{
+  "title": "Codex Web GPT 初心者向け導入ガイド",
+  "slug": "codex-web-gpt-beginner-guide",
+  "type": "manual",
+  "category": "Manual",
+  "tags": ["Codex", "ChatGPT Web", "Windows", "MCP", "Cloudflare", "Guide"],
+  "summary": "ChatGPT WebをCodexのモデルとして使い、必要に応じてMCPでローカル作業環境まで接続する手順を、初心者向けに画面付きで案内するガイド。",
+  "visibility": "limited",
+  "status": "active",
+  "color": "violet",
+  "githubRepo": "codex-web-gpt-beginner-guide",
+  "repoUrl": "https://github.com/branzfamily01/codex-web-gpt-beginner-guide",
+  "publicUrl": null,
+  "cloudflareUrl": null,
+  "accessUrl": null,
+  "updatedAt": "2026-09-07",
+  "sourceType": "project-immediate-registry"
+}
